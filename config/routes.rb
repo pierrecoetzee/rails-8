@@ -1,4 +1,23 @@
 Rails.application.routes.draw do
+  get "admin/index"
+  get "admin/users"
+  get "admin/tasks"
+  get "admin/cache_stats"
+  get "projects/index"
+  get "projects/show"
+  get "projects/new"
+  get "projects/create"
+  get "projects/edit"
+  get "projects/update"
+  get "projects/destroy"
+  get "tasks/index"
+  get "tasks/show"
+  get "tasks/new"
+  get "tasks/create"
+  get "tasks/edit"
+  get "tasks/update"
+  get "tasks/destroy"
+  get "dashboard/index"
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
