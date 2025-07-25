@@ -26,7 +26,15 @@ Rails.application.configure do
   end
 
   # Change to :null_store to avoid any caching.
-  config.cache_store = :memory_store
+  config.cache_store = :solid_cache_store
+  # Solid queue
+  config.active_job.queue_adapter = :solid_queue
+  # Action cable
+  config.action_cable.adapter = :solid_cable
+
+  # Enable caching in development for testing
+  config.action_controller.perform_caching = true
+  config.action_controller.enable_fragment_cache_logging = true
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
