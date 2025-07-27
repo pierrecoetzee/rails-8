@@ -9,7 +9,8 @@
 
 # Ignore all environment files.
 /.env*
-
+# Ignore rubymine project settings
+./idea
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
@@ -32,3 +33,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
