@@ -50,14 +50,27 @@ Rails.application.configure do
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
 
+  # Add this line to use solid_queue in development
+  config.active_job.queue_adapter = :solid_queue
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true
 
+  # Action Cable Configuration
+  config.action_cable.url = "ws://localhost:3000/cable"
+  config.action_cable.allowed_request_origins = [
+    "http://localhost:3000",
+    "https://localhost:3000"
+  ]
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  # Remove the logger assignment that might be causing issues
+  # config.action_cable.logger = Rails.logger
+  config.log_level = :debug
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true

@@ -1,0 +1,57 @@
+<div class="bg-white rounded-lg shadow p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Project Cache Status</h2>
+    <%= link_to "Auto Refresh!", admin_refresh_cache_stats_path,
+                data: { "turbo-frame": "refresh_cache_stats" },
+                class: "text-blue-600 hover:text-blue-800 text-sm" %>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completion %</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tasks Count</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completed Count</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <% @cached_projects.each do |item| %>
+        <tr id="project_<%= item[:project].id %>">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-gray-900"><%= item[:project].name %></div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                         <%= item[:cached_completion] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                <%= item[:cached_completion] ? 'Cached' : 'Not Cached' %>
+              </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                         <%= item[:cached_tasks_count] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                <%= item[:cached_tasks_count] ? 'Cached' : 'Not Cached' %>
+              </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                         <%= item[:cached_completed_count] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                <%= item[:cached_completed_count] ? 'Cached' : 'Not Cached' %>
+              </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <%= button_to 'Clear Cache', admin_clear_project_cache_path(project_id: item[:project].id),
+                          method: :delete,
+                          form: {
+                            onsubmit: "return confirm('Are you sure you want to clear cache for this project?')",
+                            data: { "turbo-frame": "project_cache_status" }
+                          },
+                          class: 'text-red-600 hover:text-red-900 bg-transparent border-none p-0 cursor-pointer' %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

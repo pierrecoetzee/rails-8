@@ -1,0 +1,42 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Cache Statistics</h1>
+    <p class="text-gray-600 mt-2">Monitor your Solid Cache performance</p>
+  </div>
+
+  <!-- Cache Actions -->
+  <div class="bg-white rounded-lg shadow p-6 mb-8">
+    <h2 class="text-xl font-semibold mb-4">Cache Management</h2>
+    <div class="flex space-x-4">
+      <%= button_to 'Clear All Cache', admin_clear_cache_path,
+                    method: :delete,
+                    form: { onsubmit: "return confirm('Are you sure you want to clear all cache?')" },
+                    class: 'bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700' %>
+      <%= link_to 'Refresh Stats', admin_cache_stats_path,
+                  class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700',
+                  data: { turbo_method: :get } %>
+    </div>
+  </div>
+
+  <!-- Project Cache Status with Turbo Frame -->
+  <%= turbo_frame_tag "project_cache_status" do %>
+    <%= render "project_cache_table" %>
+  <% end %>
+
+  <!-- Cache Performance Demo -->
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-bold text-blue-900 mb-2">Solid Cache Demo</h3>
+    <p class="text-blue-700 mb-4">
+      Visit project pages to see cache in action. The first load will compute values,
+      subsequent loads within 5 minutes will use cached results.
+    </p>
+    <div class="text-sm text-blue-600">
+      <p><strong>Cache Keys Used:</strong></p>
+      <ul class="list-disc list-inside mt-2">
+        <li><code>project_{id}_completion</code> - Task completion percentage</li>
+        <li><code>project_{id}_tasks_count</code> - Total tasks count</li>
+        <li><code>project_{id}_completed_tasks_count</code> - Completed tasks count</li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+    <p class="text-gray-600">Welcome back, <%= Current.user.name %>!</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-medium text-gray-900">Total Tasks</h3>
+      <p class="text-3xl font-bold text-blue-600"><%= current_user_stats[:total_tasks] %></p>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-medium text-gray-900">Completed</h3>
+      <p class="text-3xl font-bold text-green-600"><%= current_user_stats[:completed_tasks] %></p>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-medium text-gray-900">Pending</h3>
+      <p class="text-3xl font-bold text-yellow-600"><%= current_user_stats[:pending_tasks] %></p>
+    </div>
+
+    <!-- Projects Card wrapped in Turbo Frame -->
+    <%= turbo_frame_tag "projects_stats" do %>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-medium text-gray-900">Projects</h3>
+        <p class="text-3xl font-bold text-purple-600"><%= current_user_stats[:total_projects] %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Recent Tasks -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Recent Tasks</h2>
+      <% if @recent_tasks.any? %>
+        <div class="space-y-3">
+          <% @recent_tasks.each do |task| %>
+            <div class="flex items-center justify-between p-3 border rounded">
+              <div>
+                <h4 class="font-medium"><%= task.title %></h4>
+                <p class="text-sm text-gray-600">
+                  <span class="px-2 py-1 text-xs rounded bg-<%= task.status == 'completed' ? 'green' : 'yellow' %>-100 text-<%= task.status == 'completed' ? 'green' : 'yellow' %>-800">
+                    <%= task.status.humanize %>
+                  </span>
+                </p>
+              </div>
+              <%= link_to 'View', task_path(task), class: 'text-blue-600 hover:text-blue-800' %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-500">No tasks yet. Create your first task!</p>
+      <% end %>
+    </div>
+
+    <!-- Due Soon -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Due Soon</h2>
+      <% if @due_soon_tasks.any? %>
+        <div class="space-y-3">
+          <% @due_soon_tasks.each do |task| %>
+            <div class="p-3 border-l-4 border-orange-400 bg-orange-50">
+              <h4 class="font-medium"><%= task.title %></h4>
+              <p class="text-sm text-gray-600">Due: <%= task.due_date.strftime('%B %d, %Y') if task.due_date %></p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-500">No tasks due soon.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Background Job Demo -->
+  <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+    <h3 class="text-lg font-bold text-blue-900 mb-2">Background Jobs Demo</h3>
+    <p class="text-blue-700 mb-4">Click the button below to generate a weekly report using Solid Queue:</p>
+    <%= link_to 'Generate Weekly Report', dashboard_index_path(generate_report: true),
+                class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700',
+                method: :get %>
+    <%= link_to 'Create a project', new_project_path,
+                class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700',
+                method: :get %>
+  </div>
+
+  <!-- Notifications -->
+  <% if @notifications.any? %>
+    <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+      <h3 class="text-lg font-bold text-yellow-900 mb-4">Recent Notifications (from Cache)</h3>
+      <div class="space-y-2">
+        <% @notifications.each do |notification| %>
+          <div class="p-3 border border-yellow-300 rounded bg-white">
+            <p class="text-yellow-800"><%= notification[:message] %></p>
+            <p class="text-xs text-yellow-600">
+              <%= time_ago_in_words(notification[:created_at]) %> ago
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
