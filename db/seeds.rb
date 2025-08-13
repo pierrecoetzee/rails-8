@@ -9,7 +9,7 @@ unless Rails.env.production?
   puts "Created admin user: #{email_address} / rails123"
 
   project = Project.create!(
-    name: "Default Project",
+    name: "Default Project 1",
     description: "Default Project",
     user: user
   )
